@@ -1,3 +1,3 @@
 # Interactive voronoi banner
  
- ![Screenshot](images/screenshot.png)
+ ![images/screenshot.png](Screenshot)

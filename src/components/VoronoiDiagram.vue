@@ -122,7 +122,11 @@ export default {
 
     const onCellHover = i => {
       if (state.particles.animations[i]) {
-        state.particles.animations[i].cancel()
+        if (state.particles.animations[i].info.timeElapsed > 0.25) {
+          state.particles.animations[i].cancel()
+        } else {
+          return
+        }
       }
 
       const oneStep = 1 / 7

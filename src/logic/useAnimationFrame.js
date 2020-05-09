@@ -10,13 +10,13 @@ export function useAnimationFrame() {
     const now = new Date()
 
     for (const callbackData of callbacks) {
-      const { callback, startDateTime } = callbackData
+      const { callback, info } = callbackData
 
-      const deltaTime = differenceInMilliseconds(now, callbackData.lastFrameDateTime) / 1000
-      const timeElapsed = differenceInMilliseconds(now, startDateTime) / 1000
+      const deltaTime = differenceInMilliseconds(now, info.lastFrameDateTime) / 1000
+      info.timeElapsed = differenceInMilliseconds(now, info.startDateTime) / 1000
 
       try {
-        const shouldStop = callback({ startDateTime, timeElapsed, deltaTime })
+        const shouldStop = callback({ startDateTime: info, timeElapsed: info.timeElapsed, deltaTime })
         if (shouldStop) {
           callbacks = callbacks.filter(c => c.callbacks !== callback)
         }
@@ -24,7 +24,7 @@ export function useAnimationFrame() {
         console.error(e)
       }
 
-      callbackData.lastFrameDateTime = now
+      info.lastFrameDateTime = now
     }
 
     requestAnimationFrame(tick)
@@ -32,8 +32,8 @@ export function useAnimationFrame() {
 
   onMounted(() => {
     const now = new Date()
-    for (const callbackData of callbacks) {
-      callbackData.lastFrameDateTime = now
+    for (const { info } of callbacks) {
+      info.lastFrameDateTime = now
     }
     requestAnimationFrame(tick)
   })
@@ -42,12 +42,17 @@ export function useAnimationFrame() {
   return {
     addAnimationFrame(callback) {
       const now = new Date()
-      callbacks.push({
-        callback,
+      const info = {
+        timeElapsed: 0,
         startDateTime: now,
         lastFrameDateTime: now,
+      }
+      callbacks.push({
+        callback,
+        info,
       })
       return {
+        info,
         cancel() {
           callbacks = callbacks.filter(c => c.callbacks !== callback)
         }

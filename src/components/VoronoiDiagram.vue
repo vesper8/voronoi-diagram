@@ -21,7 +21,6 @@ import PoissonDisk from 'poisson-disk-sampling'
 import { Delaunay } from 'd3-delaunay'
 import random from 'random'
 import cloneDeep from 'lodash/cloneDeep'
-import findIndex from 'lodash/findIndex'
 import { useAnimationFrame } from '../logic/useAnimationFrame'
 import { Color, Gradient } from '../utils'
 
@@ -111,7 +110,8 @@ export default {
       }
     })
 
-    const onTouchMove = (e) => {
+    const onTouchMove = e => {
+      e.preventDefault()
       try {
         const { clientX, clientY } = e.touches[0]
         const element = document.elementFromPoint(clientX, clientY)

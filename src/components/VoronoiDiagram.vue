@@ -3,13 +3,15 @@
     xmlns="http://www.w3.org/2000/svg"
     :viewBox="`0 0 ${state.boundsSizeX} ${state.boundsSizeY}`"
     preserveAspectRatio="xMinYMin slice"
+    @touchmove="onTouchMove"
   >
     <path
       v-for="({ path, color }, i) of cells"
       :d="path"
       :fill="color"
+      :data-cell-index="i"
       :stroke="color"
-      @mouseover="onCellHover(i)"
+      @mousemove="onCellHover(i)"
     />
   </svg>
 </template>
@@ -19,6 +21,7 @@ import PoissonDisk from 'poisson-disk-sampling'
 import { Delaunay } from 'd3-delaunay'
 import random from 'random'
 import cloneDeep from 'lodash/cloneDeep'
+import findIndex from 'lodash/findIndex'
 import { useAnimationFrame } from '../logic/useAnimationFrame'
 import { Color, Gradient } from '../utils'
 
@@ -108,6 +111,14 @@ export default {
       }
     })
 
+    const onTouchMove = (e) => {
+      try {
+        const { clientX, clientY } = e.touches[0]
+        const element = document.elementFromPoint(clientX, clientY)
+        onCellHover(parseInt(element.getAttribute('data-cell-index')))
+      } catch {}
+    }
+
     const onCellHover = i => {
       if (state.particles.colors[i] !== state.particles.originalColors[i]) {
         return
@@ -164,6 +175,7 @@ export default {
       state,
       cells,
       onCellHover,
+      onTouchMove,
     }
   },
 }

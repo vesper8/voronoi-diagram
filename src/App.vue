@@ -22,6 +22,9 @@ export default {
 <style lang="scss" module>
 .app {
   position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 .githubButton {

@@ -1,5 +1,5 @@
 {
-  "name": "voronoi-banner",
+  "name": "voronoi-diagram",
   "version": "0.1.0",
   "scripts": {
     "serve": "webpack-dev-server --port=10000 --progress",

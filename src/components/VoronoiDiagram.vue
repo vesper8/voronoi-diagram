@@ -54,6 +54,7 @@ const generateParticles = (boundsSizeX, boundsSizeY) => {
     velocities: positions.map(() => generateParticleVelocity()),
     originalColors: colors,
     colors: cloneDeep(colors),
+    animations: [],
   }
 }
 
@@ -120,8 +121,8 @@ export default {
     }
 
     const onCellHover = i => {
-      if (state.particles.colors[i] !== state.particles.originalColors[i]) {
-        return
+      if (state.particles.animations[i]) {
+        state.particles.animations[i].cancel()
       }
 
       const oneStep = 1 / 7
@@ -162,7 +163,7 @@ export default {
         ],
       )
       state.particles.colors[i] = gradient.getColor(0).toString()
-      addAnimationFrame(({ timeElapsed }) => {
+      state.particles.animations[i] = addAnimationFrame(({ timeElapsed }) => {
         if (timeElapsed >= 1) {
           state.particles.colors[i] = state.particles.originalColors[i]
           return true

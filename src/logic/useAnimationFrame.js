@@ -47,6 +47,11 @@ export function useAnimationFrame() {
         startDateTime: now,
         lastFrameDateTime: now,
       })
+      return {
+        cancel() {
+          callbacks = callbacks.filter(c => c.callbacks !== callback)
+        }
+      }
     },
   }
 }

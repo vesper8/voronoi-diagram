@@ -32,7 +32,7 @@ const generateParticles = (boundsSizeX, boundsSizeY) => {
   const positions = poissonDisk.fill()
 
   const generateParticleVelocity = () => {
-    const maxVelocity = 10
+    const maxVelocity = 25
     const x = random.float(-maxVelocity, maxVelocity)
     const y = random.float(-maxVelocity, maxVelocity)
     return [x, y]

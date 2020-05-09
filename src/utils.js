@@ -32,7 +32,7 @@ export class Color {
       this.r = parseInt(parts[0], 16)
       this.g = parseInt(parts[1], 16)
       this.b = parseInt(parts[2], 16)
-      this.a = parts[3] !== undefined ? Math.round(parseInt(parts[3], 16) / 255) : 1
+      this.a = parts[3] !== undefined ? parseInt(parts[3], 16) / 255 : 1
     }
   }
 

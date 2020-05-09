@@ -8,9 +8,6 @@ import VoronoiDiagram from './VoronoiDiagram'
 export default {
   name: 'HeroBanner',
   components: { VoronoiDiagram },
-  setup() {
-    return {}
-  },
 }
 </script>
 <style lang="scss" module>

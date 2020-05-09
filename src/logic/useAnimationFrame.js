@@ -1,25 +1,18 @@
 import { onMounted, onUnmounted } from 'vue'
 import { differenceInMilliseconds } from 'date-fns'
 
-
-
 export function useAnimationFrame() {
   let callbacks = []
 
   const tick = () => {
     const now = new Date()
 
-    for (const callbackData of callbacks) {
-      const { callback, info } = callbackData
-
+    for (const { callback, cancel, info } of callbacks) {
       const deltaTime = differenceInMilliseconds(now, info.lastFrameDateTime) / 1000
       info.timeElapsed = differenceInMilliseconds(now, info.startDateTime) / 1000
 
       try {
-        const shouldStop = callback({ startDateTime: info.startDateTime, timeElapsed: info.timeElapsed, deltaTime })
-        if (shouldStop) {
-          callbacks = callbacks.filter(c => c.callbacks !== callback)
-        }
+        callback({ cancel, ...info, deltaTime })
       } catch (e) {
         console.error(e)
       }
@@ -33,6 +26,7 @@ export function useAnimationFrame() {
   onMounted(() => {
     const now = new Date()
     for (const { info } of callbacks) {
+      info.startDateTime = now
       info.lastFrameDateTime = now
     }
     requestAnimationFrame(tick)
@@ -40,23 +34,22 @@ export function useAnimationFrame() {
   onUnmounted(() => cancelAnimationFrame(tick))
 
   return {
-    addAnimationFrame(callback) {
+    addAnimation(callback) {
       const now = new Date()
-      const info = {
-        timeElapsed: 0,
-        startDateTime: now,
-        lastFrameDateTime: now,
-      }
-      callbacks.push({
+      const data = {
         callback,
-        info,
-      })
-      return {
-        info,
+        info: {
+          timeElapsed: 0,
+          startDateTime: now,
+          lastFrameDateTime: now,
+        },
         cancel() {
-          callbacks = callbacks.filter(c => c.callbacks !== callback)
-        }
+          callbacks = callbacks.filter(c => c.callback !== callback)
+        },
       }
+
+      callbacks.push(data)
+      return data
     },
   }
 }

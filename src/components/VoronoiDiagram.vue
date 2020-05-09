@@ -120,6 +120,10 @@ export default {
     const { addAnimation } = useAnimationFrame()
 
     addAnimation(({ deltaTime }) => {
+      if (deltaTime > 0.5) {
+        return
+      }
+
       for (let i = 0; i < state.particles.length; i++) {
         const pos = state.particles[i].position
         const vel = state.particles[i].velocity

@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.app">
     <hero-banner />
-    <a href="https://github.com/svsem/voronoi-banner" target="_blank" :class="$style.githubButton" v-html="githubIcon" />
+    <a href="https://github.com/svsem/voronoi-diagram" target="_blank" :class="$style.githubButton" v-html="githubIcon" />
   </div>
 </template>
 

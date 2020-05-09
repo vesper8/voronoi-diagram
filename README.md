@@ -1,2 +1,2 @@
-# voronoi-banner
+# Interactive voronoi banner
  

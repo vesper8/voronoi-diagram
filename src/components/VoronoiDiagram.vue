@@ -3,7 +3,8 @@
     xmlns="http://www.w3.org/2000/svg"
     :viewBox="`0 0 ${state.boundsSizeX} ${state.boundsSizeY}`"
     preserveAspectRatio="xMinYMin slice"
-    @touchmove="onTouchMove"
+    @touchstart.prevent
+    @touchmove.prevent="onTouchMove"
   >
     <path
       v-for="({ path, color }, i) of cells"
@@ -27,8 +28,8 @@ import { Color, Gradient } from '../utils'
 const generateParticles = (boundsSizeX, boundsSizeY) => {
   const poissonDisk = new PoissonDisk({
         shape: [boundsSizeX, boundsSizeY],
-        minDistance: 50,
-        maxDistance: 100,
+        minDistance: 100,
+        maxDistance: 300,
         tries: 30,
       })
   const positions = poissonDisk.fill()
@@ -71,8 +72,8 @@ const generateCells = (particles, boundsSizeX, boundsSizeY) => {
 export default {
   name: 'VoronoiDiagram',
   setup() {
-    const boundsSizeX = 1280
-    const boundsSizeY = 720
+    const boundsSizeX = window.innerWidth
+    const boundsSizeY = window.innerHeight
 
     const state = reactive({
       particles: generateParticles(boundsSizeX, boundsSizeY),
@@ -111,7 +112,6 @@ export default {
     })
 
     const onTouchMove = e => {
-      e.preventDefault()
       try {
         const { clientX, clientY } = e.touches[0]
         const element = document.elementFromPoint(clientX, clientY)

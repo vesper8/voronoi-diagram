@@ -16,7 +16,7 @@ export function useAnimationFrame() {
       info.timeElapsed = differenceInMilliseconds(now, info.startDateTime) / 1000
 
       try {
-        const shouldStop = callback({ startDateTime: info, timeElapsed: info.timeElapsed, deltaTime })
+        const shouldStop = callback({ startDateTime: info.startDateTime, timeElapsed: info.timeElapsed, deltaTime })
         if (shouldStop) {
           callbacks = callbacks.filter(c => c.callbacks !== callback)
         }
